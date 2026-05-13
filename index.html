@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>鱼白 immortal | AI Creator & Project Builder</title>
+    <meta
+      name="description"
+      content="鱼白 immortal 的个人网站：展示个人能力、已完成作品、AI 工作流程和长期内容实践。"
+    />
+    <meta property="og:title" content="鱼白 immortal | AI Creator & Project Builder" />
+    <meta
+      property="og:description"
+      content="一个关于个人能力、项目实践、AI 工作流程和长期成长的未来感个人空间。"
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./styles.css?v=20260513-four-point-arrival" />
+  </head>
+  <body class="is-launch-loading">
+    <canvas class="space-webgl" id="spaceScene" aria-hidden="true"></canvas>
+    <img
+      class="world-backdrop"
+      src="./assets/hero-base-clean.png"
+      alt=""
+      aria-hidden="true"
+    />
+    <img
+      class="hero-foreground"
+      src="./assets/hero-base-clean.png"
+      alt=""
+      aria-hidden="true"
+    />
+    <canvas class="portrait-particles" id="portraitParticles" aria-hidden="true"></canvas>
+    <span class="space-cursor" id="spaceCursor" aria-hidden="true"></span>
+    <span class="robot-trail" id="robotTrail" aria-hidden="true"></span>
+    <span class="robot-pointer" id="robotPointer" aria-hidden="true"></span>
+    <span class="robot-scan" id="robotScan" aria-hidden="true"></span>
+    <img
+      class="robot-companion"
+      id="robotCompanion"
+      src="./assets/robot-companion.png"
+      alt=""
+      aria-hidden="true"
+    />
+    <span class="robot-face" id="robotFace" aria-hidden="true">
+      <span class="robot-eye robot-eye-left"></span>
+      <span class="robot-eye robot-eye-right"></span>
+    </span>
+    <button class="robot-language-toggle" id="robotLanguageToggle" type="button" aria-label="Switch language">
+      <span class="robot-language-code" id="robotLanguageCode">CN</span>
+      <span class="robot-language-hint">Switch Language</span>
+    </button>
+    <div class="launch-loader" id="launchLoader" role="status" aria-live="polite" aria-label="Entering Immortal space">
+      <svg class="launch-loader-route" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <path
+          class="launch-loader-route-base"
+          d="M -8 78 C 2 58 9 42 18 39 C 29 35 37 23 49 19 C 60 15 71 23 82 38 C 76 42 69 46 65 50"
+        />
+        <path
+          class="launch-loader-route-light"
+          d="M -8 78 C 2 58 9 42 18 39 C 29 35 37 23 49 19 C 60 15 71 23 82 38 C 76 42 69 46 65 50"
+        />
+      </svg>
+      <div class="launch-loader-waypoints" aria-hidden="true">
+        <span class="launch-loader-waypoint launch-loader-waypoint-projects"></span>
+        <span class="launch-loader-waypoint launch-loader-waypoint-thinking"></span>
+        <span class="launch-loader-waypoint launch-loader-waypoint-ai"></span>
+      </div>
+      <span class="launch-loader-scan" aria-hidden="true"></span>
+      <div class="launch-loader-grid" aria-hidden="true"></div>
+      <div class="launch-loader-robot-field" aria-hidden="true">
+        <span class="launch-loader-orbit launch-loader-orbit-one"></span>
+        <span class="launch-loader-orbit launch-loader-orbit-two"></span>
+        <img class="launch-loader-robot" src="./assets/robot-companion.png" alt="" />
+      </div>
+      <div class="launch-loader-copy">
+        <p>IMMORTAL SPACE</p>
+        <h1>ARRIVAL SEQUENCE</h1>
+        <span id="launchLoaderStatus">PROJECTS VECTOR</span>
+      </div>
+      <div class="launch-loader-lines" aria-hidden="true">
+        <span>STARFIELD LOCKED</span>
+        <span>AVATAR LOCATED</span>
+        <span>COMPANION INBOUND</span>
+      </div>
+    </div>
+    <button class="robot-audio-toggle" id="robotAudioToggle" type="button" aria-label="开启背景音乐">
+      <span class="robot-audio-code" id="robotAudioCode" aria-hidden="true">♪</span>
+      <span class="robot-audio-hint" id="robotAudioHint">BGM OFF</span>
+    </button>
+
+    <main>
+      <section class="hero" id="top" aria-label="鱼白 immortal 首页主视觉">
+        <img
+          class="hero-image"
+          src="./assets/hero-base-clean.png"
+          alt="鱼白 immortal 站在未来飞船控制台前，外面是浩瀚星空"
+        />
+
+        <div class="space-depth" aria-hidden="true">
+          <span class="nebula nebula-one"></span>
+          <span class="nebula nebula-two"></span>
+        </div>
+
+        <button class="planet-hotspot planet-projects" type="button" data-planet="projects" data-target="thinking">
+          <span class="hotspot-dot"></span>
+          <span class="hotspot-copy">
+            <span class="hotspot-word">PROJECTS</span>
+            <span class="hotspot-subtitle">Built Systems</span>
+          </span>
+        </button>
+        <button class="planet-hotspot planet-thinking" type="button" data-planet="thinking" data-target="projects">
+          <span class="hotspot-dot"></span>
+          <span class="hotspot-copy">
+            <span class="hotspot-word">THINKING</span>
+            <span class="hotspot-subtitle">What I Can Do</span>
+          </span>
+        </button>
+        <button class="planet-hotspot planet-ai" type="button" data-planet="ai" data-target="ai">
+          <span class="hotspot-dot"></span>
+          <span class="hotspot-copy">
+            <span class="hotspot-word">AI</span>
+            <span class="hotspot-subtitle">Workflow Core</span>
+          </span>
+        </button>
+
+        <div class="scroll-cue" aria-hidden="true"></div>
+      </section>
+
+      <div class="scroll-signature" aria-hidden="true">
+        <svg viewBox="0 0 1280 260" role="img">
+          <defs>
+            <mask id="signatureReveal" maskUnits="userSpaceOnUse" x="0" y="0" width="1280" height="260">
+              <rect width="1280" height="260" fill="black" />
+              <path
+                class="signature-mask-path"
+                pathLength="1"
+                d="M178 150 C222 112 272 120 258 156 C246 190 202 184 220 142 C238 102 306 116 330 150 C350 178 322 190 318 154 C314 116 378 112 404 150 C424 180 394 190 390 154 C386 116 450 112 476 150 C496 180 466 190 462 154 C458 112 526 108 548 148 C568 184 526 194 526 154 C526 110 594 108 618 148 C638 182 602 192 596 156 C590 114 660 106 686 148 C708 184 666 194 666 154 C666 112 734 108 760 148 C782 182 746 194 738 158 C730 120 790 106 822 134 C854 162 830 190 790 178 C842 184 896 168 922 140 C950 110 998 120 1002 154 C1006 188 962 192 962 154 C962 114 1030 110 1054 150 C1074 184 1040 196 1034 158 C1028 116 1092 112 1124 142 C1154 170 1128 198 1084 184"
+              />
+            </mask>
+          </defs>
+          <g class="signature-word" mask="url(#signatureReveal)">
+            <text class="signature-shadow" x="50%" y="55%" text-anchor="middle">immortal</text>
+            <text class="signature-main" x="50%" y="55%" text-anchor="middle">immortal</text>
+          </g>
+          <path
+            class="signature-flourish"
+            pathLength="1"
+            d="M110 184 C260 224 420 208 548 180 C704 146 838 142 1008 176 C1088 192 1152 188 1210 160"
+          />
+        </svg>
+      </div>
+
+      <section class="section section-about" id="about">
+        <div class="about-shell about-shell-v3">
+          <div class="about-keyword-head">
+            <h2>ABOUT ME</h2>
+          </div>
+
+          <div class="about-console-v3" aria-label="关键词式自我介绍">
+            <div class="about-letter-cloud" aria-hidden="true">
+              <span class="letter-i">T</span>
+              <span class="letter-m-one">A</span>
+              <span class="letter-m-two">P</span>
+              <span class="letter-o">C</span>
+              <span class="letter-r">L</span>
+              <span class="letter-t">E</span>
+            </div>
+
+            <div class="about-keyword-field" role="tablist" aria-label="关于我的关键词">
+              <span class="about-ring about-ring-one" aria-hidden="true"></span>
+              <span class="about-ring about-ring-two" aria-hidden="true"></span>
+              <div class="about-core about-core-v3" aria-hidden="true">
+                <strong>YB</strong>
+                <span>immortal</span>
+              </div>
+
+              <button
+                class="about-tab keyword-node keyword-taste"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                data-about="taste"
+              >
+                <strong>Taste</strong>
+              </button>
+              <button
+                class="about-tab keyword-node keyword-ai"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                data-about="ai"
+              >
+                <strong>AI Creator</strong>
+              </button>
+              <button
+                class="about-tab keyword-node keyword-project"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                data-about="project"
+              >
+                <strong>Project Builder</strong>
+              </button>
+              <button
+                class="about-tab keyword-node keyword-content"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                data-about="content"
+              >
+                <strong>Content System</strong>
+              </button>
+              <button
+                class="about-tab keyword-node keyword-long"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                data-about="long"
+              >
+                <strong>Long Game</strong>
+              </button>
+              <button
+                class="about-tab keyword-node keyword-explorer"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                data-about="explorer"
+              >
+                <strong>Explorer</strong>
+              </button>
+
+              <article class="about-keyword-detail" id="aboutCard" aria-live="polite">
+                <p class="about-card-kicker" id="aboutKicker">Taste</p>
+                <h3 id="aboutTitle">Taste</h3>
+                <p id="aboutBody">我用审美做判断，用细节识别价值，不只追求“能用”，更在意“是否值得被记住”。</p>
+                <span id="aboutSignal">Taste</span>
+              </article>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <section class="section section-projects" id="projects">
+        <div class="ability-showcase">
+          <div class="ability-copy">
+            <h2 data-i18n data-cn="WHAT I CAN DO" data-en="WHAT I CAN DO">WHAT I CAN DO</h2>
+            <p
+              class="section-lead"
+              data-i18n
+              data-cn="用 AI、产品思维和个人审美，搭建可持续输出、可验证迭代的内容系统与数字产品。"
+              data-en="I use AI, product thinking, and personal taste to build sustainable content systems and digital products that can keep evolving."
+            >
+              用 AI、产品思维和个人审美，搭建可持续输出、可验证迭代的内容系统与数字产品。
+            </p>
+            <div class="ability-status" aria-live="polite">
+              <strong id="abilityTitle">AI Content System</strong>
+              <p id="abilityBody">用 AI 辅助选题、脚本、声音、封面和发布节奏，搭建一套能持续输出、测试反馈、不断进化的自媒体内容系统。</p>
+            </div>
+          </div>
+
+          <div class="ability-stage" aria-label="What I Can Do skill galaxy">
+            <canvas class="ability-webgl" id="abilityGalaxy" aria-hidden="true"></canvas>
+            <div class="ability-orbit" id="abilityOrbit">
+              <button
+                class="ability-card is-active"
+                type="button"
+                style="--i: 0"
+                data-title="AI Content System"
+                data-title-cn="AI Content System"
+                data-title-en="AI Content System"
+                data-body="用 AI 辅助选题、脚本、声音、封面和发布节奏，搭建一套能持续输出、测试反馈、不断进化的自媒体内容系统。"
+                data-body-cn="用 AI 辅助选题、脚本、声音、封面和发布节奏，搭建一套能持续输出、测试反馈、不断进化的自媒体内容系统。"
+                data-body-en="Use AI to support topics, scripts, voice, covers, and publishing rhythm, then turn them into a content system that can keep shipping and improving."
+              >
+                <strong>AI Content</strong>
+                <small data-i18n data-cn="脚本 / 声音" data-en="Script / Voice">脚本 / 声音</small>
+              </button>
+              <button
+                class="ability-card"
+                type="button"
+                style="--i: 1"
+                data-title="AI Product Thinking"
+                data-title-cn="AI Product Thinking"
+                data-title-en="AI Product Thinking"
+                data-body="不只追热点，而是判断一个 AI 想法是否真实有用、是否符合用户场景、是否值得被做成产品。"
+                data-body-cn="不只追热点，而是判断一个 AI 想法是否真实有用、是否符合用户场景、是否值得被做成产品。"
+                data-body-en="Judge whether an AI idea is useful, grounded in a real scenario, and worth turning into a product instead of only chasing trends."
+              >
+                <strong>Product Sense</strong>
+                <small data-i18n data-cn="需求 / 判断" data-en="Need / Judgment">需求 / 判断</small>
+              </button>
+              <button
+                class="ability-card"
+                type="button"
+                style="--i: 2"
+                data-title="AI Workflow Design"
+                data-title-cn="AI Workflow Design"
+                data-title-en="AI Workflow Design"
+                data-body="把复杂任务拆成提示词、资料、工具、验证和复盘步骤，让 AI 从“聊天工具”变成真正参与生产的工作流。"
+                data-body-cn="把复杂任务拆成提示词、资料、工具、验证和复盘步骤，让 AI 从“聊天工具”变成真正参与生产的工作流。"
+                data-body-en="Break complex tasks into prompts, inputs, tools, validation, and review so AI becomes part of production, not just a chat box."
+              >
+                <strong>Workflow Design</strong>
+                <small data-i18n data-cn="拆解 / 流程" data-en="Decompose / Process">拆解 / 流程</small>
+              </button>
+              <button
+                class="ability-card"
+                type="button"
+                style="--i: 3"
+                data-title="Knowledge Product"
+                data-title-cn="Knowledge Product"
+                data-title-en="Knowledge Product"
+                data-body="把项目过程、AI 用法和实操经验，整理成别人能看懂、能复用、能跟着实践的教程、清单和方法论。"
+                data-body-cn="把项目过程、AI 用法和实操经验，整理成别人能看懂、能复用、能跟着实践的教程、清单和方法论。"
+                data-body-en="Turn project process, AI usage, and hands-on experience into tutorials, checklists, and methods other people can reuse."
+              >
+                <strong>Knowledge</strong>
+                <small data-i18n data-cn="教程 / 方法" data-en="Tutorial / Method">教程 / 方法</small>
+              </button>
+              <button
+                class="ability-card"
+                type="button"
+                style="--i: 4"
+                data-title="Visual & Interaction Direction"
+                data-title-cn="Visual & Interaction Direction"
+                data-title-en="Visual & Interaction Direction"
+                data-body="把个人审美、页面表达和交互体验结合起来，让内容和产品不只是能用，而是有风格、有质感、有记忆点。"
+                data-body-cn="把个人审美、页面表达和交互体验结合起来，让内容和产品不只是能用，而是有风格、有质感、有记忆点。"
+                data-body-en="Connect taste, interface expression, and interaction so a product feels usable, distinctive, textured, and memorable."
+              >
+                <strong>Taste & Interface</strong>
+                <small data-i18n data-cn="审美 / 体验" data-en="Taste / Experience">审美 / 体验</small>
+              </button>
+              <button
+                class="ability-card"
+                type="button"
+                style="--i: 5"
+                data-title="Eval & Project Iteration"
+                data-title-cn="Eval & Project Iteration"
+                data-title-en="Eval & Project Iteration"
+                data-body="通过真实发布、用户反馈、数据观察和效果评估，持续优化内容、页面、工作流和 AI 项目。"
+                data-body-cn="通过真实发布、用户反馈、数据观察和效果评估，持续优化内容、页面、工作流和 AI 项目。"
+                data-body-en="Use release, feedback, data, and evaluation to keep improving content, pages, workflows, and AI projects."
+              >
+                <strong>Iteration</strong>
+                <small data-i18n data-cn="验证 / 复盘" data-en="Eval / Review">验证 / 复盘</small>
+              </button>
+            </div>
+            <div class="ability-core" aria-hidden="true">
+              <strong>鱼白</strong>
+              <span>immortal</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-thinking" id="thinking">
+        <div class="thinking-blackhole-bg" aria-hidden="true">
+          <canvas class="blackhole-flow-canvas" id="projectBlackholeFlow"></canvas>
+          <div class="blackhole-motion">
+            <i class="blackhole-flow blackhole-flow-a"></i>
+            <i class="blackhole-flow blackhole-flow-b"></i>
+            <i class="blackhole-glow"></i>
+            <i class="blackhole-stars blackhole-stars-a"></i>
+            <i class="blackhole-stars blackhole-stars-b"></i>
+          </div>
+        </div>
+        <div class="blackhole-archive">
+          <div class="thinking-copy">
+            <h2 data-i18n data-cn="Systems I Built" data-en="Systems I Built">Systems I Built</h2>
+          </div>
+          <div class="project-archive-status" aria-live="polite">
+            <span id="projectStatusIndex">Black Hole 01</span>
+            <strong id="projectStatusTitle">Self-Media Workflow</strong>
+            <p id="projectStatusBody">A content workflow with enough gravity to pull topic, script, cover, publishing and review into one repeatable system.</p>
+            <em id="projectStatusState">Thought Orbit Stable</em>
+          </div>
+          <div class="project-event-field">
+            <div class="project-black-hole" aria-hidden="true">
+              <i class="event-horizon"></i>
+              <i class="accretion accretion-front"></i>
+              <i class="accretion accretion-back"></i>
+              <i class="gravity-lens"></i>
+              <i class="particle-stream stream-one"></i>
+              <i class="particle-stream stream-two"></i>
+            </div>
+            <div class="signal-list" aria-label="Project orbits">
+              <article
+                class="project-module project-node-one is-active"
+                tabindex="0"
+                aria-current="true"
+                data-index="Black Hole 01"
+                data-index-cn="黑洞 01"
+                data-index-en="Black Hole 01"
+                data-title="Self-Media Workflow"
+                data-title-cn="自媒体工作流"
+                data-title-en="Self-Media Workflow"
+                data-body="A content workflow with enough gravity to pull topic, script, cover, publishing and review into one repeatable system."
+                data-body-cn="把选题、脚本、封面、发布和复盘吸进一个可重复运转的内容系统。"
+                data-body-en="A content workflow with enough gravity to pull topic, script, cover, publishing and review into one repeatable system."
+                data-state="Thought Orbit Stable"
+                data-state-cn="思考轨道稳定"
+                data-state-en="Thought Orbit Stable"
+              >
+                <span data-i18n data-cn="01 / 内容引擎" data-en="01 / Content Engine">01 / Content Engine</span>
+                <h3 data-i18n data-cn="自媒体工作流" data-en="Self-Media Workflow">Self-Media Workflow</h3>
+                <p data-i18n data-cn="思考：可复用的系统，比一次性输出更重要。" data-en="Thinking: repeatability beats one-off output.">Thinking: repeatability beats one-off output.</p>
+              </article>
+              <article
+                class="project-module project-node-two"
+                tabindex="0"
+                data-index="Black Hole 02"
+                data-index-cn="黑洞 02"
+                data-index-en="Black Hole 02"
+                data-title="Personal Website Tutorial"
+                data-title-cn="个人网站教程"
+                data-title-en="Personal Website Tutorial"
+                data-body="A public learning trail that turns website building into references, structure, interaction, deployment and iteration."
+                data-body-cn="把个人网站的制作过程拆成参考、结构、交互、部署和迭代，形成可跟做的公开教程。"
+                data-body-en="A public learning trail that turns website building into references, structure, interaction, deployment and iteration."
+                data-state="Learning Orbit Active"
+                data-state-cn="学习轨道运行中"
+                data-state-en="Learning Orbit Active"
+              >
+                <span data-i18n data-cn="02 / 建站路径" data-en="02 / Build Trail">02 / Build Trail</span>
+                <h3 data-i18n data-cn="个人网站教程" data-en="Personal Website Tutorial">Personal Website Tutorial</h3>
+                <p data-i18n data-cn="思考：教程让方法可以被迁移。" data-en="Thinking: teaching is how a method becomes portable.">Thinking: teaching is how a method becomes portable.</p>
+              </article>
+              <article
+                class="project-module project-node-three"
+                tabindex="0"
+                role="link"
+                data-index="Black Hole 03"
+                data-index-cn="黑洞 03"
+                data-index-en="Black Hole 03"
+                data-url="https://github.com/immortalyubai/codio-local-ai-radio"
+                data-title="AI Private Radio"
+                data-title-cn="AI 私人电台"
+                data-title-en="AI Private Radio"
+                data-body="A private audio field where voice, scripts and companionship keep collapsing into a more personal listening format."
+                data-body-cn="围绕声音、脚本和陪伴感，做一个更私人、更持续更新的 AI 内容频道。"
+                data-body-en="A private audio field where voice, scripts and companionship keep collapsing into a more personal listening format."
+                data-state="Voice Field Online"
+                data-state-cn="声音场在线"
+                data-state-en="Voice Field Online"
+              >
+                <span data-i18n data-cn="03 / 声音场" data-en="03 / Voice Field">03 / Voice Field</span>
+                <h3 data-i18n data-cn="AI 私人电台" data-en="AI Private Radio">AI Private Radio</h3>
+                <p data-i18n data-cn="思考：陪伴感也可以被设计成一种媒介。" data-en="Thinking: intimacy can be designed as a media format.">Thinking: intimacy can be designed as a media format.</p>
+              </article>
+              <article
+                class="project-module project-node-four"
+                tabindex="0"
+                data-index="Black Hole 04"
+                data-index-cn="黑洞 04"
+                data-index-en="Black Hole 04"
+                data-title="AI Intel Source"
+                data-title-cn="AI 信息源"
+                data-title-en="AI Intel Source"
+                data-body="A signal source for AI tools, product changes, tests and usage notes, filtered by what can actually be reused."
+                data-body-cn="追踪 AI 工具、产品变化、测试体验和真实用法，只留下能被复用的信号。"
+                data-body-en="A signal source for AI tools, product changes, tests and usage notes, filtered by what can actually be reused."
+                data-state="Signal Lens Tracking"
+                data-state-cn="信号透镜追踪中"
+                data-state-en="Signal Lens Tracking"
+              >
+                <span data-i18n data-cn="04 / 信息透镜" data-en="04 / Signal Lens">04 / Signal Lens</span>
+                <h3 data-i18n data-cn="AI 信息源" data-en="AI Intel Source">AI Intel Source</h3>
+                <p data-i18n data-cn="思考：信息只有变成判断，才真正有用。" data-en="Thinking: information only matters after it becomes judgment.">Thinking: information only matters after it becomes judgment.</p>
+              </article>
+              <article
+                class="project-module project-node-five"
+                tabindex="0"
+                role="link"
+                data-index="Black Hole 05"
+                data-index-cn="黑洞 05"
+                data-index-en="Black Hole 05"
+                data-url="https://www.douyin.com/user/MS4wLjABAAAAQjiguK2_hPLC7M_peoW_mOlErj3ST2TcnadIu28ang0?from_tab_name=main&amp;modal_id=7614769719429696806"
+                data-title="Startup Thinking"
+                data-title-cn="创业思考"
+                data-title-en="Startup Thinking"
+                data-body="A founder notebook where product judgment, business assumptions and zero-to-one experiments are compressed into decisions."
+                data-body-cn="记录从零到一的创业经历，把产品判断、商业假设和 AI 时代的新机会压缩成决策。"
+                data-body-en="A founder notebook where product judgment, business assumptions and zero-to-one experiments are compressed into decisions."
+                data-state="Decision Core Live"
+                data-state-cn="决策核心在线"
+                data-state-en="Decision Core Live"
+              >
+                <span data-i18n data-cn="05 / 决策核心" data-en="05 / Decision Core">05 / Decision Core</span>
+                <h3 data-i18n data-cn="创业思考" data-en="Startup Thinking">Startup Thinking</h3>
+                <p data-i18n data-cn="思考：产品想法必须经得起执行。" data-en="Thinking: a product idea is strongest when it survives contact with execution.">Thinking: a product idea is strongest when it survives contact with execution.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-ai" id="ai">
+        <div class="workflow-scene">
+          <img
+            class="workflow-scene-image"
+            src="./assets/hero-base-clean.png"
+            alt=""
+            aria-hidden="true"
+          />
+          <div class="workflow-scene-shade" aria-hidden="true"></div>
+          <div class="workflow-copy">
+            <p class="section-kicker" data-i18n data-cn="我的工作流" data-en="My Workflow">My Workflow</p>
+            <h2 data-i18n data-cn="Collaborators" data-en="Collaborators">Collaborators</h2>
+            <p
+              class="section-lead"
+              data-i18n
+              data-cn="我不是一个人在工作，而是在和一支 AI、创作和工程机器人小队一起推进每天的工作流。"
+              data-en="I am not working alone. I work with a small crew of AI, creative, and engineering robots to move daily workflows forward."
+            >
+              我不是一个人在工作，而是在和一支 AI、创作和工程机器人小队一起推进每天的工作流。
+            </p>
+          </div>
+
+          <div class="workflow-crew" aria-label="AI collaborators">
+            <button
+              class="workflow-step workflow-bot crew-left crew-01 is-active tool-claude"
+              type="button"
+              data-index="AI Partner 01"
+              data-title="Claude"
+              data-body="负责把复杂想法拆清楚，先整理策略、结构和表达，再进入执行。"
+              data-body-cn="负责把复杂想法拆清楚，先整理策略、结构和表达，再进入执行。"
+              data-body-en="Clarifies complex ideas first: strategy, structure, and expression before execution begins."
+              aria-label="Claude，策略和写作协作者"
+            >
+              <span class="crew-orbit" aria-hidden="true"></span>
+              <span class="crew-robot-frame">
+                <img class="crew-robot" src="./assets/robot-companion.png" alt="" />
+              </span>
+              <span class="crew-label">
+                <strong>Claude</strong>
+              </span>
+            </button>
+            <button
+              class="workflow-step workflow-bot crew-left crew-02 tool-codex"
+              type="button"
+              data-index="AI Partner 02"
+              data-title="Codex"
+              data-body="负责把页面、交互和代码真正落地，也帮我检查问题、调试和持续改版。"
+              data-body-cn="负责把页面、交互和代码真正落地，也帮我检查问题、调试和持续改版。"
+              data-body-en="Turns pages, interactions, and code into something real, then helps test, debug, and keep improving it."
+              aria-label="Codex，代码和构建协作者"
+            >
+              <span class="crew-orbit" aria-hidden="true"></span>
+              <span class="crew-robot-frame">
+                <img class="crew-robot" src="./assets/robot-companion.png" alt="" />
+              </span>
+              <span class="crew-label">
+                <strong>Codex</strong>
+              </span>
+            </button>
+            <button
+              class="workflow-step workflow-bot crew-left crew-03 tool-gemini"
+              type="button"
+              data-index="AI Partner 03"
+              data-title="Gemini"
+              data-body="负责长文本处理、资料整理和交叉判断，适合做信息归纳与多视角检查。"
+              data-body-cn="负责长文本处理、资料整理和交叉判断，适合做信息归纳与多视角检查。"
+              data-body-en="Handles long text, source sorting, and cross-checking when I need synthesis from multiple angles."
+              aria-label="Gemini，资料和总结协作者"
+            >
+              <span class="crew-orbit" aria-hidden="true"></span>
+              <span class="crew-robot-frame">
+                <img class="crew-robot" src="./assets/robot-companion.png" alt="" />
+              </span>
+              <span class="crew-label">
+                <strong>Gemini</strong>
+              </span>
+            </button>
+            <button
+              class="workflow-step workflow-bot crew-left crew-04 tool-remotion"
+              type="button"
+              data-index="Creative Tool 04"
+              data-title="Remotion"
+              data-body="负责把代码能力带进视频生产，用组件化方式生成动态视觉和可复用片段。"
+              data-body-cn="负责把代码能力带进视频生产，用组件化方式生成动态视觉和可复用片段。"
+              data-body-en="Brings code into video production, using components to generate motion graphics and reusable clips."
+              aria-label="Remotion，视频和动效协作者"
+            >
+              <span class="crew-orbit" aria-hidden="true"></span>
+              <span class="crew-robot-frame">
+                <img class="crew-robot" src="./assets/robot-companion.png" alt="" />
+              </span>
+              <span class="crew-label">
+                <strong>Remotion</strong>
+              </span>
+            </button>
+            <button
+              class="workflow-step workflow-bot crew-right crew-05 tool-gpt"
+              type="button"
+              data-index="AI Partner 05"
+              data-title="GPT"
+              data-body="负责快速生成想法草稿、改写表达和补充角度，是我随手调用的通用 AI 助手。"
+              data-body-cn="负责快速生成想法草稿、改写表达和补充角度，是我随手调用的通用 AI 助手。"
+              data-body-en="Drafts ideas, rewrites expression, and adds angles quickly as my general-purpose AI assistant."
+              aria-label="GPT，通用 AI 协作者"
+            >
+              <span class="crew-orbit" aria-hidden="true"></span>
+              <span class="crew-robot-frame">
+                <img class="crew-robot" src="./assets/robot-companion.png" alt="" />
+              </span>
+              <span class="crew-label">
+                <strong>GPT</strong>
+              </span>
+            </button>
+            <button
+              class="workflow-step workflow-bot crew-right crew-06 tool-github"
+              type="button"
+              data-index="Infra Tool 06"
+              data-title="GitHub"
+              data-body="负责保存版本、整理项目和承接部署，让每一次迭代都能追踪和回滚。"
+              data-body-cn="负责保存版本、整理项目和承接部署，让每一次迭代都能追踪和回滚。"
+              data-body-en="Keeps versions, project structure, and deployment traceable so every iteration can be reviewed or rolled back."
+              aria-label="GitHub，版本和部署协作者"
+            >
+              <span class="crew-orbit" aria-hidden="true"></span>
+              <span class="crew-robot-frame">
+                <img class="crew-robot" src="./assets/robot-companion.png" alt="" />
+              </span>
+              <span class="crew-label">
+                <strong>GitHub</strong>
+              </span>
+            </button>
+            <button
+              class="workflow-step workflow-bot crew-right crew-07 tool-obsidian"
+              type="button"
+              data-index="Knowledge Tool 07"
+              data-title="Obsidian"
+              data-body="负责沉淀笔记、知识库和复盘线索，把灵感、资料和长期思考保存成可以继续生长的系统。"
+              data-body-cn="负责沉淀笔记、知识库和复盘线索，把灵感、资料和长期思考保存成可以继续生长的系统。"
+              data-body-en="Stores notes, knowledge, and review traces so ideas and materials can keep growing into a system."
+              aria-label="Obsidian，笔记和知识库协作者"
+            >
+              <span class="crew-orbit" aria-hidden="true"></span>
+              <span class="crew-robot-frame">
+                <img class="crew-robot" src="./assets/robot-companion.png" alt="" />
+              </span>
+              <span class="crew-label">
+                <strong>Obsidian</strong>
+              </span>
+            </button>
+            <button
+              class="workflow-step workflow-bot crew-right crew-08 tool-vscode"
+              type="button"
+              data-index="Infra Tool 08"
+              data-title="VS Code"
+              data-body="负责日常写作、代码编辑和项目组织，是我把想法变成文件的主工作台。"
+              data-body-cn="负责日常写作、代码编辑和项目组织，是我把想法变成文件的主工作台。"
+              data-body-en="The main workbench for writing, code editing, and organizing ideas into actual files."
+              aria-label="VS Code，编辑器和工作台协作者"
+            >
+              <span class="crew-orbit" aria-hidden="true"></span>
+              <span class="crew-robot-frame">
+                <img class="crew-robot" src="./assets/robot-companion.png" alt="" />
+              </span>
+              <span class="crew-label">
+                <strong>VS Code</strong>
+              </span>
+            </button>
+          </div>
+
+          <div class="workflow-detail-card" aria-live="polite">
+            <span id="workflowDetailName">Claude</span>
+            <p id="workflowDetailBody">负责把复杂想法拆清楚，先整理策略、结构和表达，再进入执行。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-contact contact-minimal" id="contact">
+        <img class="contact-hero-backdrop" src="./assets/hero-base-clean.png" alt="" aria-hidden="true" />
+        <div class="contact-minimal-wrap">
+          <div class="contact-build-copy">
+            <p data-i18n data-cn="联系方式 / 平台" data-en="Contact / Platforms">Contact / Platforms</p>
+            <h2
+              data-i18n
+              data-i18n-lines
+              data-cn="一起做点|改变世界的|东西。"
+              data-en="LET'S BUILD|SOMETHING THAT|CHANGES THE WORLD."
+            >一起做点<br />改变世界的<br />东西。</h2>
+            <span
+              data-i18n
+              data-cn="想法、产品和 AI 系统，都应该被清晰地设计出来。"
+              data-en="Ideas, products, and AI systems designed with clarity."
+            >Ideas, products, and AI systems designed with clarity.</span>
+          </div>
+
+          <div class="contact-simple-list" aria-label="主要联系方式">
+            <a
+              class="contact-simple-row contact-copy-row"
+              href="#contact"
+              data-copy="luzhouyi347@gmail.com"
+              aria-label="复制邮箱地址 luzhouyi347@gmail.com"
+            >
+              <span data-i18n data-cn="邮箱" data-en="Email">Email</span>
+              <strong>luzhouyi347@gmail.com</strong>
+            </a>
+            <a
+              class="contact-simple-row contact-copy-row"
+              href="#contact"
+              data-copy="Yubaitongxue7"
+              aria-label="复制微信号 Yubaitongxue7"
+            >
+              <span data-i18n data-cn="微信 ID" data-en="WeChat ID">WeChat ID</span>
+              <strong>Yubaitongxue7</strong>
+            </a>
+            <a
+              class="contact-simple-row"
+              href="https://x.com/LZY347"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="打开 X 主页"
+            >
+              <span>X</span>
+              <strong>x.com/LZY347</strong>
+            </a>
+            <a
+              class="contact-simple-row"
+              href="https://github.com/immortalyubai"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="打开 GitHub 主页"
+            >
+              <span data-i18n data-cn="GitHub 仓库" data-en="GitHub Repo">GitHub Repo</span>
+              <strong>github.com/immortalyubai</strong>
+            </a>
+            <a
+              class="contact-simple-row"
+              href="https://www.douyin.com/user/MS4wLjABAAAAQjiguK2_hPLC7M_peoW_mOlErj3ST2TcnadIu28ang0?from_tab_name=main"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="打开抖音主页"
+            >
+              <span data-i18n data-cn="抖音" data-en="Douyin">Douyin</span>
+              <strong>douyin.com/user/MS4wLjAB...</strong>
+            </a>
+          </div>
+        </div>
+
+        <footer class="contact-footer">
+          <span data-i18n data-cn="鱼白 Immortal" data-en="Immortal Yubai">鱼白 Immortal</span>
+          <span data-i18n data-cn="个人空间 / AI 工作室" data-en="Personal Space / AI Studio">Personal Space / AI Studio</span>
+        </footer>
+      </section>
+    </main>
+
+    <script type="module" src="./main.js?v=20260513-four-point-arrival"></script>
+  </body>
+</html>
