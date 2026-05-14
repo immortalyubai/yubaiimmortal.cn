@@ -16,7 +16,6 @@ const aboutBody = document.querySelector("#aboutBody");
 const aboutSignal = document.querySelector("#aboutSignal");
 let aboutScanTimer = 0;
 const abilityStage = document.querySelector(".ability-stage");
-const abilitySection = document.querySelector("#projects");
 const abilityCanvas = document.querySelector("#abilityGalaxy");
 const abilityCards = [...document.querySelectorAll(".ability-card")];
 const abilityTitle = document.querySelector("#abilityTitle");
@@ -101,6 +100,7 @@ const state = {
   pointer: { x: 0, y: 0 },
   targetPointer: { x: 0, y: 0 },
   cursor: { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5, active: false },
+  scrollingUntil: 0,
   hoveredPlanet: null,
   planetTargets: {},
   activeAbout: null,
@@ -1999,7 +1999,7 @@ function initProjectBlackholeFlow() {
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const random = seededRandom(513449);
-  const bands = Array.from({ length: 92 }, (_, index) => ({
+  const bands = Array.from({ length: 56 }, (_, index) => ({
     angle: random() * Math.PI * 2,
     radius: 0.5 + random() * 0.55,
     speed: (0.22 + random() * 0.38) * (index % 3 === 0 ? -1 : 1),
@@ -2007,9 +2007,9 @@ function initProjectBlackholeFlow() {
     width: 0.8 + random() * 2.4,
     alpha: 0.08 + random() * 0.16,
     warm: 185 + random() * 55,
-    blur: 3 + random() * 11,
+    blur: 2 + random() * 5,
   }));
-  const dust = Array.from({ length: 110 }, () => ({
+  const dust = Array.from({ length: 72 }, () => ({
     x: random(),
     y: random(),
     speed: 0.018 + random() * 0.05,
@@ -2021,10 +2021,11 @@ function initProjectBlackholeFlow() {
   let width = 0;
   let height = 0;
   let dpr = 1;
+  let lastRenderTime = -Infinity;
 
   function resize() {
     const rect = projectBlackholeCanvas.getBoundingClientRect();
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    dpr = Math.min(window.devicePixelRatio || 1, 1.25);
     width = Math.max(1, rect.width);
     height = Math.max(1, rect.height);
     projectBlackholeCanvas.width = Math.round(width * dpr);
@@ -2072,7 +2073,7 @@ function initProjectBlackholeFlow() {
       const front = Math.sin(middle) > 0 ? 1 : 0.48;
       const radius = diskRadius * band.radius;
       const alpha = band.alpha * front * exposure * (0.84 + pulse * 0.22);
-      context.shadowBlur = band.blur;
+      context.shadowBlur = band.blur * 0.55;
       context.shadowColor = `rgba(255, ${band.warm}, 130, ${alpha * 1.2})`;
       context.strokeStyle = `rgba(255, ${band.warm}, 128, ${alpha})`;
       context.lineWidth = band.width;
@@ -2099,6 +2100,10 @@ function initProjectBlackholeFlow() {
       clear();
       return;
     }
+
+    if (time * 1000 < state.scrollingUntil) return;
+    if (time - lastRenderTime < 1 / 30) return;
+    lastRenderTime = time;
 
     const sectionRect = projectSection?.getBoundingClientRect();
     const visible = sectionRect
@@ -2308,6 +2313,7 @@ function updatePlanetFocusFromPointer(x, y) {
 
 function updateScroll() {
   state.scroll = Math.max(window.scrollY, 0);
+  state.scrollingUntil = performance.now() + 180;
   const scrollUnit = state.scroll / Math.max(state.height, 1);
   const mobile = state.width < 760;
   const heroProgress = clamp(scrollUnit / 1.08);
@@ -2621,8 +2627,6 @@ function updateThinkingTransition() {
 
   const rect = projectSection.getBoundingClientRect();
   const viewport = Math.max(state.height, 1);
-  const handoff = easeInOutCubic(clamp((viewport * 1.52 - rect.top) / (viewport * 0.68)));
-  const handoffFade = easeInOutCubic(clamp((viewport * 1.18 - rect.top) / (viewport * 0.46)));
   const enter = easeInOutCubic(clamp((viewport * 1.36 - rect.top) / (viewport * 0.92)));
   const exit = easeInOutCubic(clamp((viewport * 0.12 - rect.top) / (viewport * 0.58)));
   const presence = clamp(enter * (1 - exit));
@@ -2630,9 +2634,7 @@ function updateThinkingTransition() {
   const depth = clamp((enter - exit + 1) * 0.5);
   const contentY = (1 - enter) * 58 - exit * 38;
   const contentScale = 0.985 + presence * 0.015;
-  const bgScale = 1.095 - presence * 0.055;
 
-  root.style.setProperty("--projects-thinking-handoff", handoff.toFixed(3));
   projectSection.style.setProperty("--thinking-enter", enter.toFixed(3));
   projectSection.style.setProperty("--thinking-exit", exit.toFixed(3));
   projectSection.style.setProperty("--thinking-presence", presence.toFixed(3));
@@ -2640,11 +2642,6 @@ function updateThinkingTransition() {
   projectSection.style.setProperty("--thinking-depth", depth.toFixed(3));
   projectSection.style.setProperty("--thinking-content-y", `${contentY.toFixed(1)}px`);
   projectSection.style.setProperty("--thinking-content-scale", contentScale.toFixed(3));
-  projectSection.style.setProperty("--thinking-bg-scale", bgScale.toFixed(3));
-  if (abilitySection) {
-    abilitySection.style.setProperty("--projects-thinking-handoff", handoff.toFixed(3));
-    abilitySection.style.setProperty("--projects-thinking-fade", handoffFade.toFixed(3));
-  }
 }
 
 function activateProjectModule(card) {

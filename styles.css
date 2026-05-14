@@ -8953,12 +8953,7 @@ body.is-bgm-playing .robot-companion {
   --thinking-depth: 1;
   --thinking-content-y: 0px;
   --thinking-content-scale: 1;
-  --thinking-bg-scale: 1.04;
-  box-shadow:
-    0 -130px 180px rgb(1 3 6 / calc(0.28 + var(--thinking-edge) * 0.32)),
-    0 130px 190px rgb(1 3 6 / calc(0.34 + var(--thinking-edge) * 0.34)),
-    inset 0 140px 160px rgb(1 3 6 / calc(0.74 + var(--thinking-edge) * 0.22)),
-    inset 0 -150px 170px rgb(1 3 6 / calc(0.78 + var(--thinking-edge) * 0.2));
+  box-shadow: none;
 }
 
 .thinking-blackhole-bg {
@@ -8967,12 +8962,12 @@ body.is-bgm-playing .robot-companion {
   z-index: 1;
   overflow: hidden;
   pointer-events: none;
-  opacity: calc(0.2 + var(--thinking-presence) * 0.8);
-  transform: scale(var(--thinking-bg-scale));
-  transform-origin: center calc(52% + var(--thinking-exit) * 8%);
-  will-change: opacity, transform;
-  -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.28) 8%, #000 24%, #000 76%, rgba(0, 0, 0, 0.28) 92%, transparent 100%);
-  mask-image: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.28) 8%, #000 24%, #000 76%, rgba(0, 0, 0, 0.28) 92%, transparent 100%);
+  opacity: 0.96;
+  transform: translateZ(0) scale(1.04);
+  transform-origin: center 56%;
+  will-change: auto;
+  contain: paint;
+  backface-visibility: hidden;
 }
 
 .section-thinking .blackhole-archive {
@@ -8997,20 +8992,17 @@ body.is-bgm-playing .robot-companion {
   background:
     linear-gradient(180deg, rgba(0, 0, 0, 0.1), transparent 32%, rgba(0, 0, 0, 0.22) 100%),
     url("assets/blackhole-cinematic-bg.png") center 58% / cover no-repeat;
-  filter:
-    saturate(1.02)
-    contrast(1.07)
-    brightness(0.94);
   opacity: 0.96;
   transform-origin: center 58%;
-  animation: blackholeImageBreath 12s ease-in-out infinite;
+  transform: scale(1.025);
 }
 
 .thinking-blackhole-bg::after {
+  display: none;
   z-index: 5;
-  opacity: calc(0.68 + var(--thinking-edge) * 0.32);
+  opacity: 0.82;
   background:
-    linear-gradient(180deg, rgb(1 3 6 / calc(0.92 + var(--thinking-edge) * 0.08)) 0%, rgb(1 3 6 / calc(0.34 + var(--thinking-edge) * 0.36)) 18%, transparent 38% 66%, rgb(1 3 6 / calc(0.34 + var(--thinking-edge) * 0.34)) 86%, rgb(1 3 6 / calc(0.9 + var(--thinking-edge) * 0.1)) 100%),
+    linear-gradient(180deg, rgb(1 3 6 / 0.96) 0%, rgb(1 3 6 / 0.56) 18%, transparent 38% 66%, rgb(1 3 6 / 0.56) 86%, rgb(1 3 6 / 0.96) 100%),
     linear-gradient(90deg, rgba(1, 3, 6, 0.78), rgba(1, 3, 6, 0.16) 18%, transparent 34% 66%, rgba(1, 3, 6, 0.16) 82%, rgba(1, 3, 6, 0.78)),
     radial-gradient(ellipse 62% 48% at 50% 58%, transparent 0 54%, rgba(1, 3, 6, 0.22) 76%, rgba(1, 3, 6, 0.64) 100%);
 }
@@ -9024,46 +9016,17 @@ body.is-bgm-playing .robot-companion {
 .section-projects {
   --projects-thinking-handoff: 0;
   --projects-thinking-fade: 0;
-  box-shadow:
-    inset 0 -190px 170px rgb(1 3 6 / calc(var(--projects-thinking-handoff) * 0.62));
+  box-shadow: none;
 }
 
 .section-projects .ability-showcase {
-  opacity: calc(1 - var(--projects-thinking-fade) * 0.28);
-  filter:
-    brightness(calc(1 - var(--projects-thinking-fade) * 0.16))
-    saturate(calc(1 - var(--projects-thinking-fade) * 0.08));
-  transform:
-    translate3d(0, calc(var(--projects-thinking-fade) * 28px), 0)
-    scale(calc(1 - var(--projects-thinking-fade) * 0.014));
-  transform-origin: center 64%;
-  will-change: opacity, filter, transform;
+  opacity: 1;
+  transform: none;
+  will-change: auto;
 }
 
 .section-projects::after {
-  opacity: 1 !important;
-  background:
-    linear-gradient(
-      180deg,
-      transparent 0%,
-      rgb(1 3 6 / calc(var(--projects-thinking-handoff) * 0.14)) 46%,
-      rgb(1 3 6 / calc(var(--projects-thinking-handoff) * 0.72)) 82%,
-      rgb(1 3 6 / calc(var(--projects-thinking-handoff) * 0.94)) 100%
-    ),
-    radial-gradient(
-      ellipse 92% 44% at 50% 114%,
-      rgb(255 240 214 / calc(var(--projects-thinking-handoff) * 0.18)),
-      rgb(171 99 54 / calc(var(--projects-thinking-handoff) * 0.1)) 32%,
-      transparent 64%
-    ),
-    radial-gradient(
-      ellipse 72% 34% at 50% 106%,
-      rgb(255 255 255 / calc(var(--projects-thinking-handoff) * 0.1)),
-      transparent 54%
-    ),
-    linear-gradient(96deg, transparent 0 48%, rgba(248, 242, 232, 0.06) 48.06% 48.14%, transparent 48.26%),
-    radial-gradient(ellipse 52% 18% at 50% 72%, transparent 0 72%, rgba(155, 223, 255, 0.16) 72.18% 72.34%, transparent 72.7%) !important;
-  mix-blend-mode: normal !important;
+  display: none !important;
 }
 
 .thinking-blackhole-bg .blackhole-flow-canvas,
@@ -9077,17 +9040,12 @@ body.is-bgm-playing .robot-companion {
 
 .thinking-blackhole-bg .blackhole-flow-canvas {
   z-index: 2;
-  opacity: 0.9;
-  mix-blend-mode: screen;
-  filter: saturate(1.08) contrast(1.04);
-  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 84%, transparent 100%);
-  mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 84%, transparent 100%);
+  opacity: 0.62;
+  mix-blend-mode: normal;
 }
 
 .thinking-blackhole-bg .blackhole-motion {
-  z-index: 3;
-  opacity: 0.46;
-  mix-blend-mode: screen;
+  display: none;
 }
 
 .thinking-blackhole-bg .blackhole-glow {
